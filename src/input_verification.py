@@ -18,7 +18,7 @@ class InputVerification:
                 number1 = string[:operator_match.start()]
                 number2 = string[operator_match.start() + 1:]
             else:
-                return True
+                return False
             if re.match("^[+-]?\d+(\.\d+)?$", number1) and re.match("^[+-]?\d+(\.\d+)?$", number2):
                 # 解决除0情况
                 if re.match("[0]+", number2) and operator_match.group() == '/':
