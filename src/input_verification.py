@@ -13,17 +13,16 @@ class InputVerification:
         :return: 列表或者False
         """
         try:
-            operator_match = re.search(r'[+\-*/]', string)
-            if operator_match:
-                number1 = string[:operator_match.start()]
-                number2 = string[operator_match.start() + 1:]
-            else:
+            if not re.match("^[\-]?\d+(\.\d+)?[+\-*/][\-]?\d+(\.\d+)?$", string):
                 return False
-            if re.match("^[+-]?\d+(\.\d+)?$", number1) and re.match("^[+-]?\d+(\.\d+)?$", number2):
-                # 解决除0情况
-                if re.match("[0]+", number2) and operator_match.group() == '/':
-                    return False
-                return [number1, number2, operator_match.group()]
+            number1_match = re.search("^[\-]?\d+(\.\d+)?", string)
+            string = string[number1_match.end():]
+            operator_match = re.search('^[+\-*/]', string)
+            string = string[1:]
+            number2_match = re.search("^[\-]?\d+(\.\d+)?", string)
+            # 解决除0情况
+            if re.match("[0]+", number2_match.group()) and operator_match.group() == '/':
+                return False
+            return [number1_match.group(), number2_match.group(), operator_match.group()]
         except Exception:
             return False
-        return False
